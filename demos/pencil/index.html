@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0d18" media="(prefers-color-scheme: dark)" />
+    <meta name="description" content="Pointer Events with pressure, tilt, and pointer type — a real Apple Pencil drawing surface." />
+    <title>Apple Pencil &amp; touch · iPadOS Showcase</title>
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+    <script defer src="/assets/js/main.js"></script>
+    <script defer src="/assets/js/demos/pencil.js"></script>
+    <style>
+      .pad {
+        position: relative;
+        aspect-ratio: 16 / 10;
+        background: var(--surface-2);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        overflow: hidden;
+        touch-action: none; /* let pointer events fire continuously */
+        cursor: crosshair;
+      }
+      .pad canvas { width: 100%; height: 100%; display: block; }
+      .pad .hint {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        color: var(--text-muted);
+        font-size: 1.05rem;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+      .pad.dirty .hint { opacity: 0; }
+      .telemetry {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: var(--space-2);
+        margin-top: var(--space-3);
+      }
+      .telemetry .cell {
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 10px 12px;
+      }
+      .telemetry .k {
+        font-size: 0.72rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      .telemetry .v {
+        font-family: var(--font-mono);
+        font-size: 1.05rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <span class="brand-mark with-symbol">iP</span>
+        <span>iPadOS Showcase</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="/demos/">Demos</a>
+        <a href="/about/">About</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="demo-header">
+        <div class="crumb"><a href="/demos/">Demos</a> / Apple Pencil &amp; touch</div>
+        <h1>Apple Pencil &amp; multi-touch</h1>
+        <p class="lead">
+          A drawing surface backed by Pointer Events. Pressure changes the stroke
+          weight, tilt skews the brush, and the input type (pen vs touch vs
+          mouse) determines the color.
+        </p>
+      </div>
+
+      <div class="card demo-stage stack">
+        <div class="row">
+          <span class="status" id="status">Waiting for input…</span>
+          <button class="button ghost" id="clear" type="button">Clear</button>
+          <button class="button ghost" id="download" type="button">Download PNG</button>
+        </div>
+
+        <div class="pad" id="pad">
+          <canvas id="canvas"></canvas>
+          <div class="hint">Tap, draw, or use Apple Pencil ✎</div>
+        </div>
+
+        <div class="telemetry">
+          <div class="cell"><div class="k">pointerType</div><div class="v" id="t-type">—</div></div>
+          <div class="cell"><div class="k">pressure</div><div class="v" id="t-pressure">—</div></div>
+          <div class="cell"><div class="k">tiltX / tiltY</div><div class="v" id="t-tilt">—</div></div>
+          <div class="cell"><div class="k">altitude / azimuth</div><div class="v" id="t-azimuth">—</div></div>
+          <div class="cell"><div class="k">coalesced</div><div class="v" id="t-coalesced">—</div></div>
+        </div>
+      </div>
+
+      <section class="notes">
+        <h2>How it works</h2>
+        <p>
+          A single <code>pointerdown</code> / <code>pointermove</code> /
+          <code>pointerup</code> handler does all the work. For each move event
+          we ask the browser for <code>getCoalescedEvents()</code> — the
+          higher-frequency samples Safari captured between paints — and we draw
+          a line between every consecutive pair.
+        </p>
+        <p>
+          Stroke width is driven by <code>event.pressure</code> (0 if there is
+          no pressure sensor, otherwise 0–1). Pencil reports its tilt as
+          <code>tiltX</code>/<code>tiltY</code>, which we convert into the
+          altitude/azimuth pair the spec also exposes.
+        </p>
+        <p class="muted">
+          On a plain finger touch you'll see <code>pressure: 0.5</code> as the
+          spec-defined default and no tilt. On Pencil you'll see real values
+          changing under your hand.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span><a href="/demos/">← All demos</a></span>
+      <span><a href="/demos/motion/">Next: Tilt the iPad →</a></span>
+    </footer>
+  </body>
+</html>

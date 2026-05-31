@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0d18" media="(prefers-color-scheme: dark)" />
+    <meta name="description" content="A glassmorphism interface built with backdrop-filter, color-mix(), and a hand-painted gradient." />
+    <title>Glassmorphism · iPadOS Showcase</title>
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+    <script defer src="/assets/js/main.js"></script>
+    <style>
+      .glass-stage {
+        position: relative;
+        aspect-ratio: 4 / 3;
+        border-radius: var(--radius);
+        overflow: hidden;
+        border: 1px solid var(--border);
+        isolation: isolate;
+      }
+      .glass-bg {
+        position: absolute;
+        inset: -10%;
+        background:
+          radial-gradient(45% 60% at 20% 25%, color-mix(in oklab, #ff7eb6 90%, transparent), transparent 65%),
+          radial-gradient(35% 50% at 80% 20%, color-mix(in oklab, #ffd166 90%, transparent), transparent 65%),
+          radial-gradient(50% 60% at 65% 85%, color-mix(in oklab, #4cc9f0 90%, transparent), transparent 65%),
+          radial-gradient(60% 60% at 15% 90%, color-mix(in oklab, #7c3aed 90%, transparent), transparent 65%),
+          linear-gradient(135deg, #1f1147, #03001e);
+        animation: drift 24s linear infinite;
+        filter: saturate(1.1);
+      }
+      @keyframes drift {
+        0%   { transform: translate3d(0, 0, 0) scale(1.0); }
+        50%  { transform: translate3d(-3%, 2%, 0) scale(1.05); }
+        100% { transform: translate3d(0, 0, 0) scale(1.0); }
+      }
+      .glass-panel {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: min(78%, 380px);
+        padding: 24px;
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.16);
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        -webkit-backdrop-filter: blur(22px) saturate(180%);
+        backdrop-filter: blur(22px) saturate(180%);
+        color: white;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.35),
+          0 30px 60px rgba(0, 0, 0, 0.35);
+      }
+      .glass-panel h3 { margin: 0 0 6px; font-weight: 600; }
+      .glass-panel p  { margin: 0; opacity: 0.85; font-size: 0.95rem; }
+      .glass-dock {
+        position: absolute;
+        left: 50%;
+        bottom: 16px;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 8px;
+        padding: 8px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.14);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        -webkit-backdrop-filter: blur(18px) saturate(180%);
+        backdrop-filter: blur(18px) saturate(180%);
+      }
+      .glass-dock .icon {
+        width: 44px; height: 44px;
+        border-radius: 12px;
+        display: grid; place-items: center;
+        color: white; font-size: 18px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      }
+      .glass-dock .icon:nth-child(2) { background: linear-gradient(135deg, #ff7eb6, #ffd166); }
+      .glass-dock .icon:nth-child(3) { background: linear-gradient(135deg, #4cc9f0, #80ed99); }
+      .glass-dock .icon:nth-child(4) { background: linear-gradient(135deg, #f72585, #7209b7); }
+      .knob { display: flex; align-items: center; gap: 8px; }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <span class="brand-mark with-symbol">iP</span>
+        <span>iPadOS Showcase</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="/demos/">Demos</a>
+        <a href="/about/">About</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="demo-header">
+        <div class="crumb"><a href="/demos/">Demos</a> / Glassmorphism</div>
+        <h1>Glass, on real glass.</h1>
+        <p class="lead">
+          <code>backdrop-filter: blur()</code> is what makes the iPadOS Control
+          Center, the Dock, and Safari's own toolbar look the way they do.
+          Here's a mock-up that uses it the same way.
+        </p>
+      </div>
+
+      <div class="card demo-stage stack">
+        <div class="row">
+          <span class="status is-ok" id="status">Blurring the layer behind</span>
+          <span class="knob">
+            <span class="label">Blur</span>
+            <input type="range" id="blur" min="0" max="40" value="22" />
+          </span>
+          <span class="knob">
+            <span class="label">Saturation</span>
+            <input type="range" id="sat" min="100" max="300" value="180" />
+          </span>
+        </div>
+
+        <div class="glass-stage" id="stage">
+          <div class="glass-bg" aria-hidden="true"></div>
+          <div class="glass-panel">
+            <h3>Now playing</h3>
+            <p>A song that doesn't exist · An artist who hasn't recorded</p>
+            <div class="row" style="margin-top:14px;">
+              <button class="button ghost" type="button">⏮︎</button>
+              <button class="button primary" type="button">▶</button>
+              <button class="button ghost" type="button">⏭︎</button>
+            </div>
+          </div>
+          <div class="glass-dock" aria-hidden="true">
+            <div class="icon">✎</div>
+            <div class="icon">◐</div>
+            <div class="icon">♪</div>
+            <div class="icon">◉</div>
+          </div>
+        </div>
+      </div>
+
+      <section class="notes">
+        <h2>The single line that does the heavy lifting</h2>
+        <pre><code>backdrop-filter: blur(22px) saturate(180%);
+-webkit-backdrop-filter: blur(22px) saturate(180%);</code></pre>
+        <p>
+          Sliders update the CSS variables on the stage in real time, so you
+          can see what falls off at very low blur (the panel reads as a flat
+          tint) and very high blur (everything behind dissolves into color).
+        </p>
+        <p class="muted">
+          Pair with <code>isolation: isolate</code> on the parent so the blur
+          only samples siblings inside the stage, not the page behind it.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span><a href="/demos/pencil/">← Apple Pencil</a></span>
+      <span><a href="/demos/scroll/">Next: Scroll animation →</a></span>
+    </footer>
+
+    <script>
+      // Tiny inline controller — too small to deserve its own file.
+      (function () {
+        const panel = document.querySelector(".glass-panel");
+        const dock  = document.querySelector(".glass-dock");
+        const blur  = document.getElementById("blur");
+        const sat   = document.getElementById("sat");
+        function apply() {
+          const f = `blur(${blur.value}px) saturate(${sat.value}%)`;
+          panel.style.backdropFilter = f;
+          panel.style.webkitBackdropFilter = f;
+          dock.style.backdropFilter = f;
+          dock.style.webkitBackdropFilter = f;
+        }
+        blur.addEventListener("input", apply);
+        sat.addEventListener("input", apply);
+
+        if (!CSS.supports("backdrop-filter", "blur(1px)") &&
+            !CSS.supports("-webkit-backdrop-filter", "blur(1px)")) {
+          const status = document.getElementById("status");
+          window.iPadOS?.setStatus(status, "warn", "backdrop-filter not supported");
+        }
+      })();
+    </script>
+  </body>
+</html>

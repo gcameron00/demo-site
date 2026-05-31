@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0d18" media="(prefers-color-scheme: dark)" />
+    <meta name="description" content="The native iPadOS share sheet, opened from a button on a web page." />
+    <title>Web Share · iPadOS Showcase</title>
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+    <script defer src="/assets/js/main.js"></script>
+    <script defer src="/assets/js/demos/share.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <span class="brand-mark with-symbol">iP</span>
+        <span>iPadOS Showcase</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="/demos/">Demos</a>
+        <a href="/about/">About</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="demo-header">
+        <div class="crumb"><a href="/demos/">Demos</a> / Web Share</div>
+        <h1>Open the system share sheet.</h1>
+        <p class="lead">
+          On iPadOS, <code>navigator.share()</code> hands control to the same
+          sheet you'd get by tapping Safari's Share button — AirDrop, Messages,
+          Mail, Notes, every third-party share extension.
+        </p>
+      </div>
+
+      <div class="card demo-stage stack">
+        <div class="row">
+          <span class="status" id="status">Checking…</span>
+        </div>
+
+        <div class="row">
+          <button class="button primary" id="share-url" type="button">Share this URL</button>
+          <button class="button"          id="share-text" type="button">Share text</button>
+          <button class="button"          id="share-file" type="button">Share a generated PNG</button>
+        </div>
+
+        <p class="muted">
+          Pressing one of the buttons makes Safari open the native sheet. The
+          buttons don't transmit anywhere — the share target is whatever you
+          pick.
+        </p>
+      </div>
+
+      <section class="notes">
+        <h2>Code</h2>
+        <pre><code>await navigator.share({
+  title: "iPadOS Safari Showcase",
+  text: "Look at this neat demo.",
+  url: location.href,
+});</code></pre>
+        <p>
+          For files, you build a <code>File</code> from a Blob and pass it as
+          <code>files</code>. We call <code>navigator.canShare({ files: [f] })</code>
+          first because not every share target accepts files.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span><a href="/demos/motion/">← Tilt the iPad</a></span>
+      <span><a href="/demos/camera/">Next: Camera preview →</a></span>
+    </footer>
+  </body>
+</html>

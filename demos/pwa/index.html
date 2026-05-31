@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0d18" media="(prefers-color-scheme: dark)" />
+    <meta name="description" content="Add this site to the iPad Home Screen and watch it switch to standalone mode." />
+    <title>Add to Home Screen · iPadOS Showcase</title>
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+    <script defer src="/assets/js/main.js"></script>
+    <script defer src="/assets/js/demos/pwa.js"></script>
+    <style>
+      .install-state {
+        padding: var(--space-4);
+        border-radius: var(--radius);
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        display: flex;
+        gap: var(--space-3);
+        align-items: center;
+      }
+      .install-state .dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--text-muted);
+        flex: none;
+      }
+      .install-state.is-installed .dot { background: var(--ok); box-shadow: 0 0 14px color-mix(in oklab, var(--ok) 60%, transparent); }
+      ol.steps li { margin-bottom: 8px; }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <span class="brand-mark with-symbol">iP</span>
+        <span>iPadOS Showcase</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="/demos/">Demos</a>
+        <a href="/about/">About</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="demo-header">
+        <div class="crumb"><a href="/demos/">Demos</a> / Add to Home Screen</div>
+        <h1>Install it.</h1>
+        <p class="lead">
+          This site ships a <code>manifest.webmanifest</code> and the Apple-flavored
+          meta tags Safari needs to treat it like an installable app. Add it
+          to the Home Screen and come back here — the state below will flip.
+        </p>
+      </div>
+
+      <div class="card demo-stage stack">
+        <div class="install-state" id="state">
+          <span class="dot"></span>
+          <div>
+            <strong id="state-label">In Safari tab</strong>
+            <p class="muted" id="state-desc" style="margin:0">
+              You're viewing this site in a regular Safari tab.
+            </p>
+          </div>
+        </div>
+
+        <h2 style="margin-top: var(--space-4)">How to install on iPad</h2>
+        <ol class="steps">
+          <li>Tap the <strong>Share</strong> button at the top of Safari.</li>
+          <li>Scroll down and tap <strong>Add to Home Screen</strong>.</li>
+          <li>Confirm the name, then tap <strong>Add</strong>.</li>
+          <li>From your Home Screen, open <em>iPadOS Showcase</em> — you'll come back here, in standalone mode.</li>
+        </ol>
+
+        <h2>What changes once installed</h2>
+        <ul>
+          <li>The Safari toolbar disappears; the site is its own app window.</li>
+          <li><code>display-mode: standalone</code> and <code>navigator.standalone</code> both report <code>true</code>.</li>
+          <li>The icon and name come from the manifest.</li>
+          <li>The status bar follows <code>apple-mobile-web-app-status-bar-style</code>.</li>
+        </ul>
+
+        <p class="muted">
+          A Service Worker isn't required for installability on iPadOS, but
+          one would let the site work offline. That's tracked under Phase 4
+          in <a href="/IMPLEMENTATION_PLAN.md" rel="noopener">IMPLEMENTATION_PLAN.md</a>.
+        </p>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <span><a href="/demos/modern-css/">← Modern CSS</a></span>
+      <span><a href="/demos/">Back to demos</a></span>
+    </footer>
+  </body>
+</html>

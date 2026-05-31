@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0d18" media="(prefers-color-scheme: dark)" />
+    <meta name="description" content="Live camera preview in Safari using getUserMedia, plus a still-frame snapshot. Nothing is recorded or sent." />
+    <title>Camera preview · iPadOS Showcase</title>
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+    <script defer src="/assets/js/main.js"></script>
+    <script defer src="/assets/js/demos/camera.js"></script>
+    <style>
+      .cam-stage {
+        position: relative;
+        aspect-ratio: 16 / 9;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        overflow: hidden;
+        background: #000;
+      }
+      .cam-stage video, .cam-stage canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .cam-stage canvas { display: none; }
+      .cam-stage.frozen video { display: none; }
+      .cam-stage.frozen canvas { display: block; }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <span class="brand-mark with-symbol">iP</span>
+        <span>iPadOS Showcase</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="/demos/">Demos</a>
+        <a href="/about/">About</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="demo-header">
+        <div class="crumb"><a href="/demos/">Demos</a> / Camera preview</div>
+        <h1>Live camera in a webpage.</h1>
+        <p class="lead">
+          <code>getUserMedia</code> requests permission for the iPad's camera
+          and streams it into a <code>&lt;video&gt;</code> element. The Snap
+          button copies the current frame to a canvas, nothing is uploaded.
+        </p>
+      </div>
+
+      <div class="card demo-stage stack">
+        <div class="row">
+          <span class="status" id="status">Waiting for permission</span>
+          <button class="button primary" id="start" type="button">Start camera</button>
+          <button class="button" id="switch" type="button" disabled>Switch front / back</button>
+          <button class="button" id="snap" type="button" disabled>Snap</button>
+          <button class="button ghost" id="resume" type="button" disabled>Live</button>
+        </div>
+
+        <div class="cam-stage" id="stage">
+          <video id="video" playsinline muted autoplay></video>
+          <canvas id="snapshot"></canvas>
+        </div>
+
+        <p class="muted">
+          Privacy: the stream lives in this tab. Nothing is recorded, nothing
+          is uploaded, and the stream stops the moment you leave the page.
+        </p>
+      </div>
+
+      <section class="notes">
+        <h2>Permission &amp; secure contexts</h2>
+        <p>
+          <code>getUserMedia</code> only works on a secure context (HTTPS or
+          <code>localhost</code>). On iPadOS the permission prompt also asks
+          which camera; the Switch button just calls <code>getUserMedia</code>
+          again with the opposite <code>facingMode</code>.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span><a href="/demos/share/">← Web Share</a></span>
+      <span><a href="/demos/modern-css/">Next: Modern CSS →</a></span>
+    </footer>
+  </body>
+</html>

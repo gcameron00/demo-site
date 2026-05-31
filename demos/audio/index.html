@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0d18" media="(prefers-color-scheme: dark)" />
+    <meta name="description" content="A touch-playable Web Audio synthesizer built into a webpage." />
+    <title>Web Audio synth · iPadOS Showcase</title>
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+    <script defer src="/assets/js/main.js"></script>
+    <script defer src="/assets/js/demos/audio.js"></script>
+    <style>
+      .keyboard {
+        position: relative;
+        display: flex;
+        height: 200px;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        overflow: hidden;
+        background: #0b0f1a;
+        touch-action: none;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+      .key {
+        flex: 1;
+        background: linear-gradient(180deg, #ffffff, #e2e8f0);
+        border-right: 1px solid #cbd5e1;
+        position: relative;
+        transition: filter 0.05s ease;
+      }
+      .key.is-down { filter: brightness(0.78); }
+      .key:last-child { border-right: 0; }
+      .key.black {
+        position: absolute;
+        top: 0;
+        width: 6%;
+        height: 62%;
+        background: linear-gradient(180deg, #1f2937, #0b0f1a);
+        border-radius: 0 0 6px 6px;
+        z-index: 2;
+        border: 1px solid #000;
+      }
+      .key.black.is-down { filter: brightness(1.4); }
+      .key .label {
+        position: absolute;
+        bottom: 6px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.78rem;
+        color: #475569;
+        font-family: var(--font-mono);
+      }
+      .key.black .label { color: #cbd5e1; }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <span class="brand-mark with-symbol">iP</span>
+        <span>iPadOS Showcase</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="/demos/">Demos</a>
+        <a href="/about/">About</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="demo-header">
+        <div class="crumb"><a href="/demos/">Demos</a> / Web Audio synth</div>
+        <h1>A keyboard you can play.</h1>
+        <p class="lead">
+          A monophonic oscillator with an envelope and a low-pass filter, all
+          built from <code>AudioContext</code> nodes. iPad has a real speaker;
+          plug in headphones for the full effect.
+        </p>
+      </div>
+
+      <div class="card demo-stage stack">
+        <div class="row">
+          <span class="status" id="status">Tap a key to start the audio context</span>
+          <span class="knob">
+            <span class="label">Waveform</span>
+            <select id="wave">
+              <option>sine</option>
+              <option selected>triangle</option>
+              <option>square</option>
+              <option>sawtooth</option>
+            </select>
+          </span>
+          <span class="knob">
+            <span class="label">Cutoff</span>
+            <input type="range" id="cutoff" min="200" max="8000" value="2400" />
+          </span>
+        </div>
+
+        <div class="keyboard" id="kb" aria-label="On-screen keyboard">
+          <!-- one octave of C4..B4 plus a top C5 -->
+        </div>
+      </div>
+
+      <section class="notes">
+        <h2>The graph</h2>
+        <p>
+          For every key press we spawn a fresh oscillator, route it through a
+          biquad low-pass filter, then a per-note gain that does the
+          attack/decay/sustain/release envelope, then the master gain into
+          <code>ctx.destination</code>.
+        </p>
+        <p class="muted">
+          Mobile Safari won't let an <code>AudioContext</code> start without a
+          user gesture; the first tap on a key is what unsuspends it.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span><a href="/demos/webgl/">← WebGL</a></span>
+      <span><a href="/demos/speech/">Next: Speech synthesis →</a></span>
+    </footer>
+  </body>
+</html>
