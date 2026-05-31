@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0d18" media="(prefers-color-scheme: dark)" />
+    <meta name="description" content="Wide-gamut P3 color in CSS — reds and greens that don't exist in sRGB." />
+    <title>Wide-gamut color · iPadOS Showcase</title>
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+    <script defer src="/assets/js/main.js"></script>
+    <style>
+      .swatches {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: var(--space-2);
+      }
+      .swatch {
+        aspect-ratio: 4 / 3;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+        padding: 14px;
+        color: white;
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.35);
+      }
+      .swatch .lbl { opacity: 0.9; }
+
+      /* Pure-red comparison */
+      .swatch.red-srgb { background: #ff0000; }
+      .swatch.red-p3   { background: color(display-p3 1 0 0); }
+      /* Pure-green comparison */
+      .swatch.grn-srgb { background: #00ff00; color: #003000; text-shadow: 0 1px 1px rgba(255,255,255,0.6); }
+      .swatch.grn-p3   { background: color(display-p3 0 1 0); color: #003000; text-shadow: 0 1px 1px rgba(255,255,255,0.6); }
+      /* Pure-blue comparison */
+      .swatch.blu-srgb { background: #0000ff; }
+      .swatch.blu-p3   { background: color(display-p3 0 0 1); }
+      /* Color-mix tour */
+      .swatch.mix-1 { background: color-mix(in oklab, color(display-p3 1 0.2 0.4), color(display-p3 1 0.8 0.2)); }
+      .swatch.mix-2 { background: color-mix(in oklch, color(display-p3 0.1 0.8 0.5), color(display-p3 0.2 0.4 1)); }
+      .swatch.mix-3 { background: color-mix(in srgb, hotpink, royalblue 60%); }
+
+      .gamut-banner {
+        margin-top: var(--space-3);
+        padding: 10px 14px;
+        border-radius: var(--radius-sm);
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        font-size: 0.95rem;
+      }
+      .gamut-banner b { color: var(--accent); }
+      @media (color-gamut: p3) {
+        .gamut-banner::before { content: "🟢 "; }
+      }
+      @media not (color-gamut: p3) {
+        .gamut-banner::before { content: "🟡 "; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <span class="brand-mark with-symbol">iP</span>
+        <span>iPadOS Showcase</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="/demos/">Demos</a>
+        <a href="/about/">About</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="demo-header">
+        <div class="crumb"><a href="/demos/">Demos</a> / Wide-gamut color</div>
+        <h1>Reds that don't exist in sRGB.</h1>
+        <p class="lead">
+          Every iPad sold for the last several years ships with a Display P3
+          panel. CSS lets you address it directly — the brightest reds,
+          greens, and blues in P3 are visibly more saturated than the brightest
+          reds, greens, and blues in sRGB.
+        </p>
+      </div>
+
+      <div class="card demo-stage stack">
+        <div class="gamut-banner">
+          Your display is reporting <b id="gamut">…</b> color gamut.
+          <span class="muted">(See: <code>@media (color-gamut: p3)</code>)</span>
+        </div>
+
+        <h3 style="margin-top: var(--space-4)">sRGB vs P3, side by side</h3>
+        <div class="swatches">
+          <div class="swatch red-srgb"><span class="lbl">sRGB</span><span>#ff0000</span></div>
+          <div class="swatch red-p3"><span class="lbl">P3</span><span>color(display-p3 1 0 0)</span></div>
+          <div class="swatch grn-srgb"><span class="lbl">sRGB</span><span>#00ff00</span></div>
+          <div class="swatch grn-p3"><span class="lbl">P3</span><span>color(display-p3 0 1 0)</span></div>
+          <div class="swatch blu-srgb"><span class="lbl">sRGB</span><span>#0000ff</span></div>
+          <div class="swatch blu-p3"><span class="lbl">P3</span><span>color(display-p3 0 0 1)</span></div>
+        </div>
+
+        <h3 style="margin-top: var(--space-4)">color-mix() tour</h3>
+        <div class="swatches">
+          <div class="swatch mix-1"><span class="lbl">mix in oklab</span><span>P3 ↔ P3</span></div>
+          <div class="swatch mix-2"><span class="lbl">mix in oklch</span><span>P3 ↔ P3</span></div>
+          <div class="swatch mix-3"><span class="lbl">mix in srgb</span><span>hotpink ↔ royalblue 60%</span></div>
+        </div>
+      </div>
+
+      <section class="notes">
+        <h2>Caveats</h2>
+        <p>
+          The P3 swatches will look identical to the sRGB swatches if you're
+          viewing this on an sRGB display — the browser clamps. On an iPad,
+          there's a visible jump from one to the next.
+        </p>
+        <p class="muted">
+          <code>color-mix()</code> is independent of gamut — it just blends two
+          colors in a chosen interpolation space. Mixing in <code>oklab</code>
+          tends to keep perceived lightness even.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span><a href="/demos/scroll/">← Scroll animation</a></span>
+      <span><a href="/demos/modern-css/">Next: Modern CSS →</a></span>
+    </footer>
+
+    <script>
+      // Reflect detected gamut in the banner.
+      (function () {
+        const el = document.getElementById("gamut");
+        if (matchMedia("(color-gamut: rec2020)").matches) el.textContent = "Rec. 2020";
+        else if (matchMedia("(color-gamut: p3)").matches) el.textContent = "Display P3";
+        else if (matchMedia("(color-gamut: srgb)").matches) el.textContent = "sRGB";
+        else el.textContent = "unknown";
+      })();
+    </script>
+  </body>
+</html>

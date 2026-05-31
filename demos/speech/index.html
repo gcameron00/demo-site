@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0d18" media="(prefers-color-scheme: dark)" />
+    <meta name="description" content="The Web Speech API in Safari, with every voice your iPad knows how to use." />
+    <title>Speech synthesis · iPadOS Showcase</title>
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+    <script defer src="/assets/js/main.js"></script>
+    <script defer src="/assets/js/demos/speech.js"></script>
+    <style>
+      .speech-row { display: grid; grid-template-columns: 1fr; gap: var(--space-2); }
+      textarea.speech-text {
+        width: 100%;
+        min-height: 140px;
+        resize: vertical;
+        font-size: 1.05rem;
+      }
+      .speech-controls { display: grid; gap: var(--space-2); grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <span class="brand-mark with-symbol">iP</span>
+        <span>iPadOS Showcase</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="/demos/">Demos</a>
+        <a href="/about/">About</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="demo-header">
+        <div class="crumb"><a href="/demos/">Demos</a> / Speech synthesis</div>
+        <h1>Have your iPad read it back.</h1>
+        <p class="lead">
+          The Web Speech API talks to the same TTS engine that powers VoiceOver.
+          The voice picker lists every voice your device has downloaded —
+          including Personal Voice, if you've trained one.
+        </p>
+      </div>
+
+      <div class="card demo-stage stack">
+        <div class="row">
+          <span class="status" id="status">Loading voices…</span>
+          <button class="button primary" id="speak" type="button">Speak</button>
+          <button class="button ghost"   id="stop"  type="button">Stop</button>
+        </div>
+
+        <textarea class="speech-text" id="text" aria-label="Text to speak">A demo of the Web Speech API running in Safari on iPadOS. Change the voice, rate, and pitch using the controls below, then tap Speak.</textarea>
+
+        <div class="speech-controls">
+          <label>Voice
+            <select id="voice"><option>Loading…</option></select>
+          </label>
+          <label>Rate <span id="rate-v" class="muted">1.0</span>
+            <input type="range" id="rate" min="0.5" max="2" step="0.05" value="1" />
+          </label>
+          <label>Pitch <span id="pitch-v" class="muted">1.0</span>
+            <input type="range" id="pitch" min="0" max="2" step="0.05" value="1" />
+          </label>
+        </div>
+      </div>
+
+      <section class="notes">
+        <h2>How it works</h2>
+        <pre><code>const u = new SpeechSynthesisUtterance(text);
+u.voice = chosenVoice;
+u.rate = 1.0;
+u.pitch = 1.0;
+speechSynthesis.speak(u);</code></pre>
+        <p>
+          <code>speechSynthesis.getVoices()</code> returns asynchronously on
+          first load — Safari fires a <code>voiceschanged</code> event when
+          the list is ready. We populate the picker then.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span><a href="/demos/audio/">← Web Audio</a></span>
+      <span><a href="/demos/color/">Next: Wide-gamut color →</a></span>
+    </footer>
+  </body>
+</html>

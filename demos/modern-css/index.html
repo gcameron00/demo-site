@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0d18" media="(prefers-color-scheme: dark)" />
+    <meta name="description" content=":has(), container queries, and dynamic viewport units, all on one page." />
+    <title>Modern CSS · iPadOS Showcase</title>
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+    <script defer src="/assets/js/main.js"></script>
+    <style>
+      /* ---------- :has() demo ---------- */
+      .form-demo label {
+        display: grid;
+        gap: 4px;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 12px 14px;
+      }
+      .form-demo label:has(input:focus) {
+        border-color: color-mix(in oklab, var(--accent) 60%, var(--border));
+        box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 20%, transparent);
+      }
+      .form-demo label:has(input:invalid:not(:placeholder-shown)) {
+        border-color: color-mix(in oklab, var(--danger) 60%, var(--border));
+      }
+      .form-demo:has(input:invalid:not(:placeholder-shown)) .submit { opacity: 0.5; pointer-events: none; }
+
+      /* ---------- Container queries demo ---------- */
+      .cq-wrap {
+        display: grid;
+        gap: var(--space-3);
+        grid-template-columns: 1fr;
+      }
+      @media (min-width: 720px) {
+        .cq-wrap { grid-template-columns: 1fr 2fr; }
+      }
+      .cq-card {
+        container-type: inline-size;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 14px;
+      }
+      .cq-card .inner {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .cq-card .inner img,
+      .cq-card .inner .ph {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border-radius: 10px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      }
+      @container (min-width: 420px) {
+        .cq-card .inner {
+          flex-direction: row;
+          align-items: center;
+        }
+        .cq-card .inner .ph { width: 40%; aspect-ratio: 1; }
+      }
+
+      /* ---------- Dynamic viewport units demo ---------- */
+      .dvh-stage {
+        height: 50dvh;
+        background: linear-gradient(180deg,
+          color-mix(in oklab, var(--accent) 20%, var(--surface-2)),
+          color-mix(in oklab, var(--accent-2) 20%, var(--surface-2)));
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        display: grid;
+        place-items: center;
+        font-family: var(--font-mono);
+        color: var(--text-muted);
+        text-align: center;
+        padding: var(--space-3);
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <span class="brand-mark with-symbol">iP</span>
+        <span>iPadOS Showcase</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="/demos/">Demos</a>
+        <a href="/about/">About</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="demo-header">
+        <div class="crumb"><a href="/demos/">Demos</a> / Modern CSS</div>
+        <h1>Three modern selectors. One page.</h1>
+        <p class="lead">
+          <code>:has()</code>, container queries, and dynamic viewport units —
+          each with a tiny working demo and the rule that makes it go.
+        </p>
+      </div>
+
+      <div class="card demo-stage stack">
+        <h2 style="margin-top:0">1. The parent selector — <code>:has()</code></h2>
+        <p>
+          The whole form below is a single CSS rule. The label glows when its
+          input has focus. The submit button dims while any input has a
+          <code>:invalid</code> value, because <code>.form-demo:has(input:invalid:not(:placeholder-shown))</code>
+          matches the parent.
+        </p>
+        <form class="form-demo stack" onsubmit="event.preventDefault();">
+          <label>
+            <span>Email</span>
+            <input type="email" placeholder="you@example.com" required />
+          </label>
+          <label>
+            <span>Age (must be ≥ 13)</span>
+            <input type="number" min="13" placeholder="—" required />
+          </label>
+          <div>
+            <button class="button primary submit" type="submit">Submit</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card demo-stage stack" style="margin-top: var(--space-3);">
+        <h2 style="margin-top:0">2. Container queries — <code>@container</code></h2>
+        <p>
+          Both cards below have the same markup. The left one sits in a narrow
+          column, the right one in a wide column. The card's <em>own</em>
+          width decides whether it lays out vertically or horizontally — not
+          the viewport.
+        </p>
+        <div class="cq-wrap">
+          <div class="cq-card">
+            <div class="inner">
+              <div class="ph"></div>
+              <div>
+                <strong>Narrow column</strong>
+                <p class="muted" style="margin:0">Below 420 px, I stack.</p>
+              </div>
+            </div>
+          </div>
+          <div class="cq-card">
+            <div class="inner">
+              <div class="ph"></div>
+              <div>
+                <strong>Wide column</strong>
+                <p class="muted" style="margin:0">Above 420 px, I sit on a row.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card demo-stage stack" style="margin-top: var(--space-3);">
+        <h2 style="margin-top:0">3. Dynamic viewport units — <code>dvh</code></h2>
+        <p>
+          On Safari, scrolling collapses the toolbar and the visible viewport
+          height grows. <code>100dvh</code> tracks the <em>current</em> height
+          and resizes accordingly, while <code>100vh</code> stays fixed at the
+          large size. The box below is <code>50dvh</code>.
+        </p>
+        <div class="dvh-stage">I am 50dvh tall. Pull-to-refresh me on iPad to feel it.</div>
+        <p class="muted">Also available: <code>svh</code> (small) and <code>lvh</code> (large) for the locked extremes.</p>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <span><a href="/demos/color/">← Wide-gamut color</a></span>
+      <span><a href="/demos/pwa/">Next: PWA →</a></span>
+    </footer>
+  </body>
+</html>

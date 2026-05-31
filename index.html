@@ -1,17 +1,153 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="light dark" />
-    <title>Home</title>
-    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="/assets/css/styles.css">
+    <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0d18" media="(prefers-color-scheme: dark)" />
+    <meta name="description" content="A static showcase of modern web platform features that ship in Safari on iPadOS — pencil input, scroll-driven animations, P3 color, PWAs, and more." />
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="iPadOS Showcase" />
+
+    <title>iPadOS Safari Showcase</title>
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.svg" />
+    <link rel="stylesheet" href="/assets/css/styles.css" />
     <script defer src="/assets/js/main.js"></script>
   </head>
   <body>
-    <h1>It works 🎉</h1>
-    <p>This site is deployed using Cloudflare Pages.</p>
-    <p><a href="/about/">About</a></p>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <span class="brand-mark with-symbol">iP</span>
+        <span>iPadOS Showcase</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="/demos/">Demos</a>
+        <a href="/about/">About</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <span class="eyebrow">Built for Safari on iPad</span>
+        <h1>The web platform, the way Safari shows it off.</h1>
+        <p class="lead">
+          A hand-built tour of the browser features that make a modern iPad feel
+          alive — Apple Pencil pressure on a real canvas, scroll-driven motion on
+          a real scroll surface, glassmorphism that really uses
+          <code>backdrop-filter</code>, and a dozen more, with nothing between
+          you and the platform.
+        </p>
+        <div class="row" style="margin-top: 1rem;">
+          <a class="button primary" href="/demos/">Explore the demos →</a>
+          <a class="button ghost" href="/about/">What is this?</a>
+        </div>
+      </section>
+
+      <section>
+        <h2>Pick a demo</h2>
+        <p class="muted">
+          Every tile below is a self-contained page. Tap any of them — they work
+          best on iPad in Safari, but each one gracefully tells you what you'd
+          see if you were.
+        </p>
+
+        <div class="grid">
+          <a class="card feature" href="/demos/pencil/">
+            <div class="icon" aria-hidden="true">✎</div>
+            <h3>Apple Pencil & touch</h3>
+            <p>Draw on a canvas that reads pressure, tilt, and pointer type from real hardware.</p>
+            <span class="tag">Pointer Events</span>
+          </a>
+
+          <a class="card feature" href="/demos/glass/">
+            <div class="icon" aria-hidden="true">◐</div>
+            <h3>Glassmorphism</h3>
+            <p>A panel that frosts whatever is behind it using <code>backdrop-filter</code>.</p>
+            <span class="tag">CSS</span>
+          </a>
+
+          <a class="card feature" href="/demos/scroll/">
+            <div class="icon" aria-hidden="true">↕</div>
+            <h3>Scroll-driven animation</h3>
+            <p>Motion that runs on scroll position rather than time, with snap.</p>
+            <span class="tag">CSS</span>
+          </a>
+
+          <a class="card feature" href="/demos/motion/">
+            <div class="icon" aria-hidden="true">⟳</div>
+            <h3>Tilt the iPad</h3>
+            <p>Read the gyroscope and accelerometer in real time, with the iOS permission prompt.</p>
+            <span class="tag">Sensors</span>
+          </a>
+
+          <a class="card feature" href="/demos/webgl/">
+            <div class="icon" aria-hidden="true">◆</div>
+            <h3>WebGL 3D</h3>
+            <p>An interactive 3D scene you can spin with a finger or the Pencil.</p>
+            <span class="tag">Graphics</span>
+          </a>
+
+          <a class="card feature" href="/demos/audio/">
+            <div class="icon" aria-hidden="true">♪</div>
+            <h3>Web Audio synth</h3>
+            <p>A touchable keyboard built from a single oscillator graph.</p>
+            <span class="tag">Audio</span>
+          </a>
+
+          <a class="card feature" href="/demos/speech/">
+            <div class="icon" aria-hidden="true">🗣</div>
+            <h3>Speech synthesis</h3>
+            <p>Have the page read itself aloud, in any voice your iPad knows.</p>
+            <span class="tag">Speech</span>
+          </a>
+
+          <a class="card feature" href="/demos/color/">
+            <div class="icon" aria-hidden="true">●</div>
+            <h3>Wide-gamut color</h3>
+            <p>Reds and greens that don't exist in sRGB, courtesy of P3.</p>
+            <span class="tag">CSS</span>
+          </a>
+
+          <a class="card feature" href="/demos/share/">
+            <div class="icon" aria-hidden="true">↗</div>
+            <h3>Web Share</h3>
+            <p>Open the iPadOS share sheet from a button — the same one the system uses.</p>
+            <span class="tag">Platform</span>
+          </a>
+
+          <a class="card feature" href="/demos/camera/">
+            <div class="icon" aria-hidden="true">◉</div>
+            <h3>Camera preview</h3>
+            <p>Live <code>getUserMedia</code> stream, with a snapshot button. Nothing leaves the page.</p>
+            <span class="tag">Media</span>
+          </a>
+
+          <a class="card feature" href="/demos/modern-css/">
+            <div class="icon" aria-hidden="true">{ }</div>
+            <h3>Modern CSS</h3>
+            <p><code>:has()</code>, container queries, <code>dvh</code> — all in one page.</p>
+            <span class="tag">CSS</span>
+          </a>
+
+          <a class="card feature" href="/demos/pwa/">
+            <div class="icon" aria-hidden="true">⤓</div>
+            <h3>Add to Home Screen</h3>
+            <p>Install this site as a PWA and watch it switch to standalone mode.</p>
+            <span class="tag">PWA</span>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>Built as a static site, served from Cloudflare Pages.</span>
+      <span><a href="/about/">About</a> · <a href="https://webkit.org" rel="noopener">WebKit</a></span>
+    </footer>
   </body>
 </html>

@@ -1,15 +1,110 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="light dark" />
-    <title>About</title>
-    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="/assets/css/styles.css">
+    <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0d18" media="(prefers-color-scheme: dark)" />
+    <meta name="description" content="About the iPadOS Safari Showcase — what it is, why it exists, and how it was built." />
+
+    <title>About · iPadOS Safari Showcase</title>
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.svg" />
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+    <script defer src="/assets/js/main.js"></script>
   </head>
   <body>
-    <h1>About</h1>
-    <p><a href="/">Back home</a></p>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <span class="brand-mark with-symbol">iP</span>
+        <span>iPadOS Showcase</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="/demos/">Demos</a>
+        <a href="/about/">About</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <span class="eyebrow">About</span>
+        <h1>What this site is.</h1>
+        <p class="lead">
+          A demonstration of the modern web platform features that ship in
+          Safari on iPadOS, built so you can actually <em>experience</em> them —
+          press a Pencil into a real canvas, tilt the iPad into a real sensor,
+          install the site to a real home screen.
+        </p>
+      </section>
+
+      <section class="stack">
+        <div class="card">
+          <h2 style="margin-top:0">Why iPadOS specifically?</h2>
+          <p>
+            iPad is the place where browser features tend to land in the most
+            tactile form: an Apple Pencil with pressure and tilt, a wide-gamut
+            P3 display, a gyroscope you can spin in your hands, a real share
+            sheet, real Add-to-Home-Screen, real haptics. A lot of these APIs
+            exist on every modern browser, but it's iPad where they feel like
+            an integrated <em>device</em> rather than a viewport.
+          </p>
+          <p>
+            Most demos render <em>something</em> on a desktop browser, but each
+            page is honest about what it can't do where you're viewing it.
+          </p>
+        </div>
+
+        <div class="card">
+          <h2 style="margin-top:0">How it was built</h2>
+          <ul>
+            <li>Plain HTML, CSS, and JavaScript. No framework, no bundler, no build step.</li>
+            <li>A single shared stylesheet provides the design system; each demo adds at most one tiny script of its own.</li>
+            <li>Pages navigate to each other through Safari's <a href="https://developer.mozilla.org/docs/Web/API/View_Transitions_API">cross-document View Transitions</a> — the soft cross-fade between any two pages is the browser doing it for us.</li>
+            <li>Deployed as static files to <a href="https://pages.cloudflare.com" rel="noopener">Cloudflare Pages</a>.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h2 style="margin-top:0">Privacy</h2>
+          <p>
+            No analytics, no cookies, no tracking. Some demos ask for camera,
+            microphone, or motion access — granting permission only lets them
+            render in this tab. Nothing is recorded, stored, or sent anywhere.
+          </p>
+        </div>
+
+        <div class="card">
+          <h2 style="margin-top:0">Browser support</h2>
+          <p>
+            The site is built Safari-first. It still loads in Chrome, Firefox,
+            and desktop Safari, but a handful of demos lean on iPadOS-only
+            behavior (Pencil pressure, the iOS DeviceMotion permission prompt,
+            Add to Home Screen as the PWA install gesture). When something
+            isn't available, the page detects it and tells you what you'd
+            otherwise see.
+          </p>
+        </div>
+
+        <div class="card">
+          <h2 style="margin-top:0">Credits</h2>
+          <p>
+            Designed and built for <a href="https://github.com/gcameron00/demo-site">gcameron00/demo-site</a>.
+            Inspired by Apple's WWDC web sessions and the
+            <a href="https://webkit.org/blog/" rel="noopener">WebKit blog</a>.
+          </p>
+          <p class="muted" style="margin-bottom:0">
+            See <a href="https://github.com/gcameron00/demo-site/blob/main/IMPLEMENTATION_PLAN.md">IMPLEMENTATION_PLAN.md</a> for the full roadmap.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span><a href="/">← Home</a></span>
+      <span><a href="/demos/">Browse demos →</a></span>
+    </footer>
   </body>
 </html>

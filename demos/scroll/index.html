@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0d18" media="(prefers-color-scheme: dark)" />
+    <meta name="description" content="CSS scroll-driven animations: motion tied to scroll position rather than time." />
+    <title>Scroll-driven animation · iPadOS Showcase</title>
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+    <script defer src="/assets/js/main.js"></script>
+    <style>
+      .scroll-stage {
+        height: 70dvh;
+        max-height: 720px;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        overflow-y: auto;
+        scroll-snap-type: y mandatory;
+        -webkit-overflow-scrolling: touch;
+        position: relative;
+        background: var(--surface-2);
+      }
+      .scroll-progress {
+        position: sticky;
+        top: 0;
+        left: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--accent), var(--accent-2));
+        transform-origin: 0 50%;
+        z-index: 2;
+        animation: progress linear;
+        animation-timeline: scroll(self);
+        transform: scaleX(0);
+      }
+      @keyframes progress { to { transform: scaleX(1); } }
+
+      .scroll-slide {
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+        min-height: 70dvh;
+        padding: var(--space-5);
+        display: grid;
+        place-items: center;
+        text-align: center;
+        position: relative;
+      }
+      .scroll-slide h2 { font-size: clamp(2rem, 6vw, 4rem); margin: 0; }
+      .scroll-slide p  { max-width: 36ch; color: var(--text-muted); }
+
+      .scroll-slide .stamp {
+        animation: rise both linear;
+        animation-timeline: view();
+        animation-range: entry 10% cover 50%;
+      }
+      @keyframes rise {
+        from { opacity: 0; transform: translateY(40px) scale(0.96); }
+        to   { opacity: 1; transform: translateY(0)    scale(1); }
+      }
+
+      .slide-1 { background: linear-gradient(160deg, #e0f2fe, #ede9fe); }
+      .slide-2 { background: linear-gradient(160deg, #fef3c7, #fee2e2); }
+      .slide-3 { background: linear-gradient(160deg, #dcfce7, #cffafe); }
+      .slide-4 { background: linear-gradient(160deg, #fae8ff, #fce7f3); }
+      @media (prefers-color-scheme: dark) {
+        .slide-1 { background: linear-gradient(160deg, #082f49, #1e1b4b); }
+        .slide-2 { background: linear-gradient(160deg, #422006, #450a0a); }
+        .slide-3 { background: linear-gradient(160deg, #052e16, #083344); }
+        .slide-4 { background: linear-gradient(160deg, #3b0764, #500724); }
+        .scroll-slide h2 { color: #f8fafc; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <span class="brand-mark with-symbol">iP</span>
+        <span>iPadOS Showcase</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="/demos/">Demos</a>
+        <a href="/about/">About</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="demo-header">
+        <div class="crumb"><a href="/demos/">Demos</a> / Scroll-driven animation</div>
+        <h1>Motion tied to your finger.</h1>
+        <p class="lead">
+          The progress bar at the top of the box below is driven by
+          <code>animation-timeline: scroll(self)</code> — no JavaScript, no
+          <code>scroll</code> listener, no <code>requestAnimationFrame</code>.
+          Inside, each slide animates in via <code>animation-timeline: view()</code>
+          when it enters the viewport.
+        </p>
+      </div>
+
+      <div class="card demo-stage" style="padding: 0; overflow: hidden;">
+        <div class="scroll-stage" id="stage">
+          <div class="scroll-progress" aria-hidden="true"></div>
+          <section class="scroll-slide slide-1">
+            <div>
+              <h2 class="stamp">Scroll ↓</h2>
+              <p class="stamp">This box snaps and animates as you move through it.</p>
+            </div>
+          </section>
+          <section class="scroll-slide slide-2">
+            <div>
+              <h2 class="stamp">No JS</h2>
+              <p class="stamp">The progress bar above only uses CSS.</p>
+            </div>
+          </section>
+          <section class="scroll-slide slide-3">
+            <div>
+              <h2 class="stamp">No timers</h2>
+              <p class="stamp">Animations advance with your finger, not the clock.</p>
+            </div>
+          </section>
+          <section class="scroll-slide slide-4">
+            <div>
+              <h2 class="stamp">Snap.</h2>
+              <p class="stamp"><code>scroll-snap-type: y mandatory</code> holds you on a slide.</p>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <section class="notes">
+        <h2>How the progress bar works</h2>
+        <pre><code>.scroll-progress {
+  animation: progress linear;
+  animation-timeline: scroll(self);
+  transform-origin: 0 50%;
+}
+@keyframes progress { to { transform: scaleX(1); } }</code></pre>
+        <p>
+          <code>scroll(self)</code> says "use my own scroll position as the
+          timeline" — at the top of the scroller the animation is at 0%, at the
+          bottom it's at 100%. <code>view()</code> works the same way but on
+          per-element visibility, so each slide's title can rise as the slide
+          enters view.
+        </p>
+        <p class="muted">
+          Safari shipped both timelines in 2024. On a browser that doesn't
+          support them, the animation simply never advances and the page still
+          works — the progress bar just stays at zero.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span><a href="/demos/glass/">← Glassmorphism</a></span>
+      <span><a href="/demos/color/">Next: Wide-gamut color →</a></span>
+    </footer>
+  </body>
+</html>

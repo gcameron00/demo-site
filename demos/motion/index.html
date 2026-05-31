@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0d18" media="(prefers-color-scheme: dark)" />
+    <meta name="description" content="DeviceOrientation in Safari on iPadOS, including the iOS permission prompt." />
+    <title>Tilt the iPad · iPadOS Showcase</title>
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+    <script defer src="/assets/js/main.js"></script>
+    <script defer src="/assets/js/demos/motion.js"></script>
+    <style>
+      .gimbal {
+        position: relative;
+        aspect-ratio: 1;
+        max-width: 360px;
+        margin: 0 auto;
+        perspective: 1000px;
+      }
+      .gimbal .ring {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        border: 2px solid color-mix(in oklab, var(--accent) 60%, transparent);
+        transform-style: preserve-3d;
+        transition: transform 0.05s linear;
+      }
+      .gimbal .ring.outer { border-style: dashed; }
+      .gimbal .ring.middle { inset: 12%; border-color: color-mix(in oklab, var(--accent-2) 60%, transparent); }
+      .gimbal .ring.inner  {
+        inset: 24%;
+        border-color: color-mix(in oklab, var(--accent-3) 70%, transparent);
+        background: radial-gradient(circle at 50% 50%,
+          color-mix(in oklab, var(--accent) 30%, transparent), transparent 70%);
+      }
+      .gimbal .crosshair {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+      .gimbal .crosshair::before,
+      .gimbal .crosshair::after {
+        content: "";
+        position: absolute;
+        background: color-mix(in oklab, var(--text) 25%, transparent);
+      }
+      .gimbal .crosshair::before { left: 50%; top: 0; bottom: 0; width: 1px; }
+      .gimbal .crosshair::after  { top: 50%; left: 0; right: 0; height: 1px; }
+      .axis {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-2);
+        margin-top: var(--space-3);
+      }
+      .axis .cell {
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 10px 12px;
+        text-align: center;
+      }
+      .axis .k { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; }
+      .axis .v { font-family: var(--font-mono); font-size: 1.2rem; }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <span class="brand-mark with-symbol">iP</span>
+        <span>iPadOS Showcase</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="/demos/">Demos</a>
+        <a href="/about/">About</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="demo-header">
+        <div class="crumb"><a href="/demos/">Demos</a> / Tilt the iPad</div>
+        <h1>Tilt it.</h1>
+        <p class="lead">
+          Safari on iOS / iPadOS requires that you ask permission, on a user
+          gesture, before delivering motion events. Tap the button, allow it,
+          then move the iPad.
+        </p>
+      </div>
+
+      <div class="card demo-stage stack">
+        <div class="row">
+          <span class="status" id="status">Waiting for permission</span>
+          <button class="button primary" id="start" type="button">Enable motion</button>
+        </div>
+
+        <div class="gimbal" id="gimbal" aria-hidden="true">
+          <div class="ring outer" id="ring-outer"></div>
+          <div class="ring middle" id="ring-middle"></div>
+          <div class="ring inner" id="ring-inner"></div>
+          <div class="crosshair"></div>
+        </div>
+
+        <div class="axis">
+          <div class="cell"><div class="k">α (z)</div><div class="v" id="t-alpha">—</div></div>
+          <div class="cell"><div class="k">β (x)</div><div class="v" id="t-beta">—</div></div>
+          <div class="cell"><div class="k">γ (y)</div><div class="v" id="t-gamma">—</div></div>
+        </div>
+      </div>
+
+      <section class="notes">
+        <h2>What's happening</h2>
+        <p>
+          On a click handler we feature-detect
+          <code>DeviceOrientationEvent.requestPermission</code>. If it exists
+          (i.e. we're on iOS / iPadOS), we call it; otherwise we just attach
+          the listener directly. Once granted, the page receives
+          <code>deviceorientation</code> events with three angles — alpha,
+          beta, and gamma — that we map onto a stack of nested rings.
+        </p>
+        <p class="muted">
+          Permission is per-origin and per-session in iOS. If you refuse, the
+          page stays in its waiting state.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span><a href="/demos/pencil/">← Apple Pencil</a></span>
+      <span><a href="/demos/share/">Next: Web Share →</a></span>
+    </footer>
+  </body>
+</html>
